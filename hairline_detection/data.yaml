@@ -1,0 +1,7 @@
+path: /Users/koviressler/Desktop/DailyTefillin/hairline_detection
+train: images/train
+val: images/val
+test: images/test
+
+nc: 1
+names: ['hairline']

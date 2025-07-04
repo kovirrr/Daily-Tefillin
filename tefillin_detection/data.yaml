@@ -1,0 +1,5 @@
+path: /Users/koviressler/Desktop/DailyTefillin/tefillin_detection
+train: data/train
+val: data/val
+nc: 1
+names: ['tefillin']

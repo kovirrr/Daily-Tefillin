@@ -1,0 +1,6 @@
+train: /Users/koviressler/Desktop/DailyTefillin/tefillin_detection/finallyTef/train/images
+val: /Users/koviressler/Desktop/DailyTefillin/tefillin_detection/finallyTef/valid/images
+test: /Users/koviressler/Desktop/DailyTefillin/tefillin_detection/finallyTef/test/images
+
+nc: 1
+names: ["tefillin"]
