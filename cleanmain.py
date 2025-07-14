@@ -291,7 +291,7 @@ def tef_good(image, ref=""): #input cv2.imread(frames) of the pic and the refere
     if teffilin_point[0] > eye_cords[0][0] and teffilin_point[0] < eye_cords[1][0]: #teffilin is between eyes
         if teffilin_point[1] < hairline_point[1]: #teffilin is below hairline
             return True
-    return False #teffilin is not in the right place
+    return False #teffilin is not in the right place 
 
 
     
