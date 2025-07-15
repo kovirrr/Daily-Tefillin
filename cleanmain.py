@@ -7,7 +7,7 @@ import time
 
 
 #========== VARIABLES =============
-face_detector = LM.Face()#detects face with variables (not used)
+face_detector = LM.Face()#detects face with variables
 
 #========== FUNCTIONS =============
 def annotate_and_show(image, cords,
@@ -49,28 +49,25 @@ def annotate_and_show(image, cords,
 
     return img_copy
 
+def detect_eyes(image):
+    imgRGB = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    
+    face_detector.Find_Points(image, imgRGB)
+
+    left_eye_points = face_detector.Left_Eye()
+    right_eye_points = face_detector.Right_Eye()
+
+    if not left_eye_points or not right_eye_points:
+        return None
+    
+    return [left_eye_points[1], right_eye_points[0]] # Return only the inner corners of each eye
+
 def detect_face(image): #helper func for face_features
     imgRGB = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     pts = face_detector.Find_Points(image, imgRGB)  # Find points on the face
-    if pts is None:
+    if pts == []:
         return None  # No points found
     return pts  # Return the detected points on the face
-
-def detect_eyes(image):
-    imgRGB = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    pts = face_detector.Find_Points(image, imgRGB)
-    if pts is None:
-        return []
-
-    # we're interested only in ids 243 (left eye) and 463 (right eye)
-    desired = [243, 463]
-    coords = []
-    for did in desired:
-        p = next((p for p in pts if p[0] == did), None)
-        if p:
-            coords.append([p[1], p[2]])
-
-    return coords
 
 def detect_hairline(image):
     model = YOLO(
@@ -116,6 +113,7 @@ def detect_tefillin(image):
     ]
 
 def lowest_hairline_point(eye_cords, forehead_cords): #helper func for get_lowest_hairline_point
+    print("Eye Coordinates:", eye_cords)
     if not eye_cords[0] or not eye_cords[1] or not forehead_cords:
         return None
     left_x = eye_cords[0][1]#[1]  # right-most x value of left eye
@@ -284,12 +282,17 @@ def tef_good(image, ref=""): #input cv2.imread(frames) of the pic and the refere
     
 
 
-    if not eye_cords or not tef_cords:
-        return "Invalid Info" #if any of the detections failed
+    if not eye_cords:
+        return "No eyes detected"
+    if not tef_cords:
+        return "No tefillin detected"
     teffilin_point = [((tef_cords[0][0] + tef_cords[2][0]) / 2), tef_cords[1][1]] #lowest point of box (y), in the middle (x)
     
-    if teffilin_point[0] > eye_cords[0][0] and teffilin_point[0] < eye_cords[1][0]: #teffilin is between eyes
-        if teffilin_point[1] < hairline_point[1]: #teffilin is below hairline
+    print("Eye Coordinates:", eye_cords)
+    print("Hairline Point:", hairline_point)
+    print("Tefillin Point:", teffilin_point)
+    if teffilin_point[0] > eye_cords[0][1] and teffilin_point[0] < eye_cords[1][1]: #teffilin is between eyes
+        if teffilin_point[1] < hairline_point[1]: #teffilin is below hairline (y cords are reversed)
             return True
     return False #teffilin is not in the right place 
 
@@ -300,5 +303,8 @@ def tef_good(image, ref=""): #input cv2.imread(frames) of the pic and the refere
 
 initialize(cv2.imread("/Users/koviressler/Desktop/DailyTefillin/people/kovi.JPG"))
 
-img = cv2.imread("/Users/koviressler/Desktop/DailyTefillin/people/2e73bf89-ab6c-462c-94ca-dbd9a7766cb8.JPG")
+print("passed initialization")
+
+img = cv2.imread("/Users/koviressler/Desktop/DailyTefillin/people/zacky.JPG")
+print("readed")
 print(tef_good(img))

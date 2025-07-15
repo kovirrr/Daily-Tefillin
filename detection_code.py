@@ -5,7 +5,7 @@ class FullBody_LM:
     def __init__(self):
         self.mpDrawing = mp.solutions.drawing_utils
 
-        self.mpFace = mp.solutions.face_mesh.FaceMesh(static_image_mode=False,
+        self.mpFace = mp.solutions.face_mesh.FaceMesh(static_image_mode=True,
                                                       max_num_faces=1,
                                                       refine_landmarks=True,
                                                       min_detection_confidence=0.5,

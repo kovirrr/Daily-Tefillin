@@ -3,11 +3,12 @@
 
 import detection_code as LM
 import cv2 as cv
+import sys
 
 cap = cv.VideoCapture(0)  # 0 as a default webcam
 face_detector = LM.Face()  # detect face with variable
 
-picture_path = '/Users/koviressler/Desktop/DailyTefillin/eye_detection/tefillinEx.jpeg'
+picture_path = '/Users/koviressler/Desktop/DailyTefillin/people/zacky.JPG'
 
 def draw_eye_points(img, detected_eyes):
     if detected_eyes != [None, None]:
